@@ -1,4 +1,4 @@
-package agh.tai.Twitter.News.Feed;
+package agh.tai.twitter_news_feed;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

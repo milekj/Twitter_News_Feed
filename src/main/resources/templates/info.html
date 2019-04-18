@@ -7,8 +7,7 @@
     <title>Title</title>
 </head>
 <body>
-    <a th:href="@{/auth/twitter}">
-    <img th:src="@{login_with_twitter.png}">
-    </a>
+    Hello, <th th:text="${user.username}"/> <br>
+    <img th:src="${connection.imageUrl}" />
 </body>
 </html>
