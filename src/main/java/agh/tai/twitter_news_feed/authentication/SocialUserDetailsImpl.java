@@ -1,5 +1,6 @@
-package agh.tai.twitter_news_feed;
+package agh.tai.twitter_news_feed.authentication;
 
+import agh.tai.twitter_news_feed.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.security.SocialUserDetails;
@@ -28,7 +29,7 @@ public class SocialUserDetailsImpl implements SocialUserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.EMPTY_LIST;
+        return Collections.emptyList();
     }
 
     @Override

@@ -1,0 +1,29 @@
+<!--Map<String,Long> interestsMap-->
+
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div style="font-size: 40px">
+        Found interests:
+    </div>
+    <div class="interestsTable" style="padding-top: 50px">
+        <table class="col-sm-6" style="width: 100%;">
+            <tr>
+                <th>Name of interest</th>
+                <th>Found times</th>
+            </tr>
+            <th:block th:each="interest : ${interestsMap}">
+                <tr>
+                    <td th:text="${interest.key}" />
+                    <td th:text="${interest.value}" />
+                </tr>
+            </th:block>
+        </table>
+    </div>
+</body>
+</html>

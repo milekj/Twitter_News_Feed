@@ -1,10 +1,9 @@
-package agh.tai.twitter_news_feed;
+package agh.tai.twitter_news_feed.config;
 
+import agh.tai.twitter_news_feed.authentication.TwitterCredentials;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.social.UserIdSource;
@@ -20,23 +19,21 @@ import org.springframework.social.twitter.connect.TwitterConnectionFactory;
 
 import javax.sql.DataSource;
 
-
 @Configuration
-@PropertySource("classpath:credentials.properties")
 @EnableSocial
 public class SocialConfig implements SocialConfigurer {
     private DataSource dataSource;
     private ConnectionFactoryLocator connectionFactoryLocator;
+    private TwitterCredentials twitterCredentials;
 
-    @Value("${twitter.consumerKey}")
-    private String twitterConsumerKey;
-
-    @Value("${twitter.consumerSecret}")
-    private String twitterConsumerSecret;
+    @Autowired
+    public SocialConfig(TwitterCredentials twitterCredentials) {
+        this.twitterCredentials = twitterCredentials;
+    }
 
     @Override
     public void addConnectionFactories(ConnectionFactoryConfigurer factoryConfigurer, Environment environment) {
-        TwitterConnectionFactory twitterFactory = new TwitterConnectionFactory(twitterConsumerKey, twitterConsumerSecret);
+        TwitterConnectionFactory twitterFactory = new TwitterConnectionFactory(twitterCredentials.CONSUMER_KEY, twitterCredentials.CONSUMER_SECRET);
         factoryConfigurer.addConnectionFactory(twitterFactory);
     }
 
@@ -64,4 +61,5 @@ public class SocialConfig implements SocialConfigurer {
     public void setConnectionFactoryLocator(ConnectionFactoryLocator connectionFactoryLocator) {
         this.connectionFactoryLocator = connectionFactoryLocator;
     }
+
 }

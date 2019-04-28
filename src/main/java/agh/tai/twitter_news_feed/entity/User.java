@@ -1,4 +1,6 @@
-package agh.tai.twitter_news_feed;
+package agh.tai.twitter_news_feed.entity;
+
+import agh.tai.twitter_news_feed.entity.utils.UserId;
 
 import javax.persistence.*;
 

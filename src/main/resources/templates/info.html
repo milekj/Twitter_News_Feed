@@ -9,5 +9,10 @@
 <body>
     Hello, <th th:text="${user.username}"/> <br>
     <img th:src="${connection.imageUrl}" />
+    <div class="interest" style="padding-top: 50px">
+        <form action="/interest" method="get">
+            <button type="submit">Interests!</button>
+        </form>
+    </div>
 </body>
 </html>
