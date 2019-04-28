@@ -43,9 +43,6 @@ public class User {
 
     private Long expireTime;
 
-    public User() {
-    }
-
     public String getUserId() {
         return userId;
     }
@@ -133,4 +130,5 @@ public class User {
     public void setExpireTime(long expireTime) {
         this.expireTime = expireTime;
     }
+
 }

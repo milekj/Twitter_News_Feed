@@ -1,4 +1,5 @@
-<!--Map<String,Long> interestsMap-->
+<!--Map<String,Long> offeredInterestsMap-->
+<!--List<String> userInterests-->
 
 <!DOCTYPE html>
 <html lang="en"
@@ -8,22 +9,69 @@
     <title>Title</title>
 </head>
 <body>
-    <div style="font-size: 40px">
-        Found interests:
+    <div class="user-interests-wrapper">
+        <div style="font-size: 40px">
+            User interests:
+        </div>
+        <div class="user-interests-table">
+<!--            <table>-->
+<!--                <tr>-->
+<!--                    <th>Name of interest</th>-->
+<!--                </tr>-->
+                <li th:each="interestName : ${userInterests}">
+<!--                    <div class="col-md-6" th:text="${interestName}"></div>-->
+<!--                    <div class="col-md-6">-->
+<!--                        <button onclick="onClick(${interestName})">Find tweets</button>-->
+<!--                    </div>-->
+                    <form action="/interest_tweet" method="get">
+                        <input type="hidden" name="interestName" th:value="${interestName}" />
+                        <input type="submit" th:value="${interestName}" />
+                    </form>
+                </li>
+<!--                <th:block th:each="interestName : ${userInterests}">-->
+<!--                    <tr>-->
+<!--                        <div class="interest">-->
+<!--                            <form th:action="@{/interest_tweet}" method="get" th:object="${user}">-->
+<!--                                <input type="hidden" th:value="*{id}" id="id" name="id"/>-->
+<!--                            </form>-->
+<!--&lt;!&ndash;                            <form action="/interest_tweet" method="get">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <td th:text="${interestName}" />&ndash;&gt;-->
+<!--&lt;!&ndash;                                <a href="/interest_tweet?${interestName}">${interestName}</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <input type="hidden" name="interestName" value="${interestName}" />&ndash;&gt;-->
+<!--&lt;!&ndash;                            </form>&ndash;&gt;-->
+<!--                        </div>-->
+<!--                    </tr>-->
+<!--                </th:block>-->
+<!--            </table>-->
+        </div>
     </div>
-    <div class="interestsTable" style="padding-top: 50px">
-        <table class="col-sm-6" style="width: 100%;">
-            <tr>
-                <th>Name of interest</th>
-                <th>Found times</th>
-            </tr>
-            <th:block th:each="interest : ${interestsMap}">
+    <div class="offered-interests-wrapper" style="padding-top: 50px">
+        <div style="font-size: 40px">
+            Offered interests:
+        </div>
+        <div class="offered-interests-table">
+            <table style="width: 20%">
                 <tr>
-                    <td th:text="${interest.key}" />
-                    <td th:text="${interest.value}" />
+                    <th>Name of interest</th>
+                    <th>Found times</th>
                 </tr>
-            </th:block>
-        </table>
+                <th:block th:each="interest : ${offeredInterestsMap}">
+                    <tr>
+                        <td th:text="${interest.key}" />
+                        <td th:text="${interest.value}" />
+                    </tr>
+                </th:block>
+            </table>
+        </div>
     </div>
 </body>
 </html>
+
+<script>
+    function onClick(hashtag) {
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.open("GET", "/interest_tweet?interestName=" + hashtag, false); // false for synchronous request
+        xmlHttp.send(null);
+        return xmlHttp.responseText;
+    }
+</script>

@@ -13,4 +13,5 @@ public class TwitterCredentials {
 
     @Value("${twitter.consumerSecret}")
     public String CONSUMER_SECRET;
+
 }

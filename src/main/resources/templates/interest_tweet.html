@@ -1,0 +1,37 @@
+<!--List<TweetDto> interestingTweets-->
+
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div class="tweets-wrapper">
+        <div style="font-size: 40px; color: blue">
+            Found tweets with hashtag:
+        </div>
+        <div class="tweets-table">
+<!--            <table>-->
+<!--                <th:block th:each="tweet : ${interestingTweets}">-->
+                    <div th:each="tweet : ${interestingTweets}">
+                        <div>
+                            <img th:src="${tweet.profileImageUrl}" />
+                            <td th:text="${tweet.fromUser}" />
+                        </div>
+                        <div>
+                          <td th:text="${tweet.createdAt}" />
+                        </div>
+                        <div>
+                            <td th:text="${tweet.text}" />
+                        </div>
+                    </tr>
+<!--                </th:block>-->
+<!--            </table>-->
+        </div>
+    </div>
+
+</body>
+</html>
