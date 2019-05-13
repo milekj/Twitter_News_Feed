@@ -2,7 +2,7 @@ package agh.tai.twitter_news_feed.service;
 
 import agh.tai.twitter_news_feed.authentication.SocialUserDetailsImpl;
 import agh.tai.twitter_news_feed.entity.User;
-import agh.tai.twitter_news_feed.dao.UserRepository;
+import agh.tai.twitter_news_feed.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.social.connect.Connection;

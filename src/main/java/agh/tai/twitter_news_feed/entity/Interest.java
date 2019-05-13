@@ -14,19 +14,19 @@ public class Interest {
     @Column(nullable = false)
     private String name;
 
-    private String userId;
+    @ManyToOne
+    @JoinColumns({@JoinColumn(name = "userId"), @JoinColumn(name = "providerId"), @JoinColumn(name = "providerUserId")})
+    private User user;
+
+    @Column(nullable = false)
+    private boolean excluded;
 
     public Interest() {
     }
 
-    public Interest(String name, String userId) {
+    public Interest(String name, User user) {
         this.name = name;
-        this.userId = userId;
-    }
-
-    public Interest(int intId, String userId) {
-        this.intId = intId;
-        this.userId = userId;
+        this.user = user;
     }
 
     public int getIntId() {
@@ -45,12 +45,23 @@ public class Interest {
         this.name = name;
     }
 
-    public String getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
+    public boolean isExcluded() {
+        return excluded;
+    }
+
+    public void setExcluded(boolean excluded) {
+        this.excluded = excluded;
+    }
+
+    public boolean isIncluded() {
+        return !excluded;
+    }
 }

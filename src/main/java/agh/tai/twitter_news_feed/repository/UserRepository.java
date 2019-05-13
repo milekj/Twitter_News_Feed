@@ -1,4 +1,4 @@
-package agh.tai.twitter_news_feed.dao;
+package agh.tai.twitter_news_feed.repository;
 
 import agh.tai.twitter_news_feed.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;

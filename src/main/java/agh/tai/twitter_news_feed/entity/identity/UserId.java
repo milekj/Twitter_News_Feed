@@ -1,4 +1,4 @@
-package agh.tai.twitter_news_feed.entity.utils;
+package agh.tai.twitter_news_feed.entity.identity;
 
 import java.io.Serializable;
 import java.util.Objects;

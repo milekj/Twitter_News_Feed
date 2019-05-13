@@ -1,8 +1,9 @@
 package agh.tai.twitter_news_feed.entity;
 
-import agh.tai.twitter_news_feed.entity.utils.UserId;
+import agh.tai.twitter_news_feed.entity.identity.UserId;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "userconnection",
@@ -42,6 +43,9 @@ public class User {
     private String refreshToken;
 
     private Long expireTime;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Interest> interests;
 
     public String getUserId() {
         return userId;
@@ -131,4 +135,11 @@ public class User {
         this.expireTime = expireTime;
     }
 
+    public List<Interest> getInterests() {
+        return interests;
+    }
+
+    public void setInterests(List<Interest> interests) {
+        this.interests = interests;
+    }
 }
