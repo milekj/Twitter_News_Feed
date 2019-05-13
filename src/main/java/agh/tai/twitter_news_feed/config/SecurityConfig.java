@@ -12,15 +12,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/info")
                 .authenticated()
-                .and()
+                    .and()
                 .rememberMe()
-                .and()
+                    .and()
+                .logout()
+                .logoutUrl("/logout")
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .logoutSuccessUrl("/")
+                    .and()
                 .apply(newSpringSocialConfigurer());
     }
 
     private SpringSocialConfigurer newSpringSocialConfigurer() {
         SpringSocialConfigurer socialConfigurer = new SpringSocialConfigurer();
-        socialConfigurer.postLoginUrl("/info");
+        socialConfigurer.postLoginUrl("/postLogin");
         return socialConfigurer;
     }
 }

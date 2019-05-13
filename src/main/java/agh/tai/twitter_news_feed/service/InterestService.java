@@ -5,6 +5,7 @@ import agh.tai.twitter_news_feed.dao.IInterestDao;
 import agh.tai.twitter_news_feed.dto.TweetDto;
 import agh.tai.twitter_news_feed.entity.Interest;
 import agh.tai.twitter_news_feed.entity.User;
+import com.zaxxer.hikari.util.SuspendResumeLock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.twitter.api.*;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class InterestService implements IInterestService {
 
     private static final int TWEETS_WITH_HASH_TAG = 5;
 
-    private static final int FILTERED_TWEETS_NUMBER = 100;
+    private static final int FILTERED_TWEETS_NUMBER = 200;
 
     private IInterestDao interestDao;
 
@@ -37,9 +38,9 @@ public class InterestService implements IInterestService {
     public Map<String, Long> getFavouriteInterests(SocialUserDetailsImpl userDetails) {
         Twitter twitter = getTwitterApiForAuthenticatedUser(userDetails);
         TimelineOperations timelineOperations = twitter.timelineOperations();
-        List<Tweet> homeTimeline = timelineOperations.getHomeTimeline(FILTERED_TWEETS_NUMBER);
+        List<Tweet> homeTimeline = timelineOperations.getUserTimeline(FILTERED_TWEETS_NUMBER);
         return homeTimeline.stream()
-                .filter(this::shouldTweetBeFiltered)
+                //.filter(this::shouldTweetBeFiltered)
                 .map(Tweet::getEntities)
                 .map(Entities::getHashTags)
                 .flatMap(Collection::stream)
