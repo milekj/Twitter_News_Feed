@@ -56,7 +56,7 @@
             Add your own interest:
         </div>
         <div class="input-container" id="input-text">
-            <form action="/add_interest">
+            <form action="/addInterest">
                 <input class="input-field" required='' type='text' name="interestName">
                 <label placeholder='Any interest...'></label>
                 <button type="submit" value="Add">Add</button>
@@ -68,20 +68,20 @@
 
 <script>
     function addInterest(interestName) {
-        location.href = '/add_interest?interestName=' + interestName
+        location.href = '/addInterest?interestName=' + interestName
     }
 
     function removeInterest(interestName) {
-        location.href = '/remove_interest?interestName=' + interestName
+        location.href = '/removeInterest?interestName=' + interestName
 
     }
 
     function findTweetsByInterest(interestName) {
-        location.href = '/interest_tweet?interestName=' + interestName
+        location.href = '/interestTweet?interestName=' + interestName
     }
 
     function excludeInterest(interestName) {
-        location.href = '/exclude_interest?interestName=' + interestName
+        location.href = '/excludeInterest?interestName=' + interestName
     }
 </script>
 

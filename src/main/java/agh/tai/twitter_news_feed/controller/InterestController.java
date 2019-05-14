@@ -27,15 +27,15 @@ public class InterestController {
         return "interest_main";
     }
 
-    @GetMapping("/interest_tweet")
+    @GetMapping("/interestTweet")
     public String getTweetsRelatedToInterest(@AuthenticationPrincipal SocialUserDetailsImpl userDetails,
                                              @RequestParam String interestName,
                                              Model model) {
         model.addAttribute("interestingTweets", interestService.getLatestTweetsWithHashTag(userDetails, interestName));
-        return "interest_tweet";
+        return "interestTweet";
     }
 
-    @GetMapping("/add_interest")
+    @GetMapping("/addInterest")
     public String addInterest(@AuthenticationPrincipal SocialUserDetailsImpl userDetails,
                               @RequestParam String interestName,
                               Model model) {
@@ -44,7 +44,7 @@ public class InterestController {
         return "/interest_main";
     }
 
-    @GetMapping("/remove_interest")
+    @GetMapping("/removeInterest")
     public String removeInterest(@AuthenticationPrincipal SocialUserDetailsImpl userDetails,
                                  @RequestParam String interestName,
                                  Model model) {
@@ -58,7 +58,7 @@ public class InterestController {
         model.addAttribute("userInterests", interestService.getAllUserInterestsName(userDetails.getUser()));
     }
 
-    @GetMapping
+    @GetMapping("/excludeInterest")
     public String excludeInterest(@AuthenticationPrincipal SocialUserDetailsImpl userDetails,
                                   @RequestParam String interestName,
                                   Model model) {

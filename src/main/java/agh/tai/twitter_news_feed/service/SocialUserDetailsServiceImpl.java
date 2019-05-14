@@ -34,4 +34,5 @@ public class SocialUserDetailsServiceImpl implements SocialUserDetailsService {
                 .orElseThrow(() -> new IllegalArgumentException("User does not exist"));
         return new SocialUserDetailsImpl(user, connection);
     }
+
 }

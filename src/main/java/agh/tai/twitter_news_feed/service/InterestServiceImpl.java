@@ -12,40 +12,26 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import static agh.tai.twitter_news_feed.constants.Constants.*;
 
 @Service
 public class InterestServiceImpl implements InterestService {
 
-    private static final int FAVOURITE_INTERESTS_NUMBER = 10;
-
-    private static final int TWEETS_WITH_HASH_TAG = 5;
-
-    private static final int FILTERED_TWEETS_NUMBER = 100;
-
     private InterestRepository interestRepository;
 
-    @Autowired
-    public InterestServiceImpl(InterestRepository interestRepository) {
-        this.interestRepository = interestRepository;
-    }
+    private TwitterApiService twitterApiService;
 
-    private Twitter getTwitterApiForAuthenticatedUser(SocialUserDetailsImpl userDetails) {
-        return userDetails.getConnection().getApi();
+    @Autowired
+    public InterestServiceImpl(InterestRepository interestRepository,
+                               TwitterApiService twitterApiService) {
+        this.interestRepository = interestRepository;
+        this.twitterApiService = twitterApiService;
     }
 
     @Override
     public Map<String, Long> getFavouriteInterests(SocialUserDetailsImpl userDetails) {
-        Twitter twitter = getTwitterApiForAuthenticatedUser(userDetails);
-        TimelineOperations timelineOperations = twitter.timelineOperations();
-//        List<Tweet> homeTimeline = timelineOperations.getHomeTimeline(FILTERED_TWEETS_NUMBER);
-        List<Tweet> favorites = timelineOperations.getFavorites(FILTERED_TWEETS_NUMBER);
-//        List<Tweet> mentions = timelineOperations.getMentions(FILTERED_TWEETS_NUMBER);
-//        List<Tweet> userTimeline = timelineOperations.getUserTimeline(FILTERED_TWEETS_NUMBER);
-//        return Stream.of(homeTimeline, favorites, mentions, userTimeline)
-        //todo
-        return Stream.of(favorites)
-                .flatMap(Collection::stream)
+        return twitterApiService.getTimeLineOperations(userDetails).stream()
                 .filter(this::shouldTweetBeFiltered)
                 .map(Tweet::getEntities)
                 .map(Entities::getHashTags)
@@ -80,8 +66,7 @@ public class InterestServiceImpl implements InterestService {
 
     @Override
     public List<TweetDto> getLatestTweetsWithHashTag(SocialUserDetailsImpl userDetails, String hashTag) {
-        Twitter twitter = getTwitterApiForAuthenticatedUser(userDetails);
-        SearchOperations searchOperations = twitter.searchOperations();
+        SearchOperations searchOperations = twitterApiService.getSearchOperations(userDetails);
         SearchResults search = searchOperations.search("#" + hashTag);
         return search.getTweets().stream()
                 .limit(TWEETS_WITH_HASH_TAG)
@@ -117,4 +102,5 @@ public class InterestServiceImpl implements InterestService {
                 .filter(Interest::isExcluded)
                 .collect(Collectors.toList());
     }
+
 }
