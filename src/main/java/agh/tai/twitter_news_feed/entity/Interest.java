@@ -1,9 +1,10 @@
 package agh.tai.twitter_news_feed.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"name", "userId"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"name", "userid"}))
 public class Interest {
 
     @Id
@@ -15,11 +16,16 @@ public class Interest {
     private String name;
 
     @ManyToOne
-    @JoinColumns({@JoinColumn(name = "userId"), @JoinColumn(name = "providerId"), @JoinColumn(name = "providerUserId")})
+    @JoinColumns({@JoinColumn(name = "userid", referencedColumnName = "userid"),
+            @JoinColumn(name = "providerid", referencedColumnName = "providerid"),
+            @JoinColumn(name = "provideruserid", referencedColumnName = "provideruserid")})
     private User user;
 
     @Column(nullable = false)
     private boolean excluded;
+
+    @OneToMany(mappedBy = "interest", fetch = FetchType.LAZY)
+    private List<News> news;
 
     public Interest() {
     }
@@ -63,5 +69,13 @@ public class Interest {
 
     public boolean isIncluded() {
         return !excluded;
+    }
+
+    public List<News> getNews() {
+        return news;
+    }
+
+    public void setNews(List<News> news) {
+        this.news = news;
     }
 }

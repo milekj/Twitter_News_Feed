@@ -8,6 +8,7 @@ import agh.tai.twitter_news_feed.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.twitter.api.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.function.Function;
@@ -101,6 +102,12 @@ public class InterestServiceImpl implements InterestService {
         return interestRepository.findAllByUser(user).stream()
                 .filter(Interest::isExcluded)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Interest> findAllUserInterests(User user) {
+        return interestRepository.findAllByUser(user);
     }
 
 }

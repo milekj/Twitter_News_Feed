@@ -1,6 +1,6 @@
 package agh.tai.twitter_news_feed.config;
 
-import agh.tai.twitter_news_feed.authentication.TwitterCredentials;
+import agh.tai.twitter_news_feed.authentication.ApiCredentials;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,16 +24,16 @@ import javax.sql.DataSource;
 public class SocialConfig implements SocialConfigurer {
     private DataSource dataSource;
     private ConnectionFactoryLocator connectionFactoryLocator;
-    private TwitterCredentials twitterCredentials;
+    private ApiCredentials apiCredentials;
 
     @Autowired
-    public SocialConfig(TwitterCredentials twitterCredentials) {
-        this.twitterCredentials = twitterCredentials;
+    public SocialConfig(ApiCredentials apiCredentials) {
+        this.apiCredentials = apiCredentials;
     }
 
     @Override
     public void addConnectionFactories(ConnectionFactoryConfigurer factoryConfigurer, Environment environment) {
-        TwitterConnectionFactory twitterFactory = new TwitterConnectionFactory(twitterCredentials.CONSUMER_KEY, twitterCredentials.CONSUMER_SECRET);
+        TwitterConnectionFactory twitterFactory = new TwitterConnectionFactory(apiCredentials.CONSUMER_KEY, apiCredentials.CONSUMER_SECRET);
         factoryConfigurer.addConnectionFactory(twitterFactory);
     }
 

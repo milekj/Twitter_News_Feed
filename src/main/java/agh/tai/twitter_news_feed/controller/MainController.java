@@ -1,6 +1,7 @@
   package agh.tai.twitter_news_feed.controller;
 
 import agh.tai.twitter_news_feed.authentication.SocialUserDetailsImpl;
+import agh.tai.twitter_news_feed.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,10 +19,12 @@ import java.util.Objects;
 public class MainController {
 
     private ProviderSignInUtils providerSignInUtils;
+    private NewsService NewsService;
 
     @Autowired
-    public MainController(ProviderSignInUtils providerSignInUtils) {
+    public MainController(ProviderSignInUtils providerSignInUtils, NewsService NewsService) {
         this.providerSignInUtils = providerSignInUtils;
+        this.NewsService = NewsService;
     }
 
     @GetMapping("/")

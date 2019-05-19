@@ -22,6 +22,8 @@ public interface InterestService {
 
     void excludeInterest(Interest interest);
 
+    List<Interest> findAllUserInterests(User user);
+
     //todo
     List<Interest> findAllUserExcludedInterests(User user);
 
