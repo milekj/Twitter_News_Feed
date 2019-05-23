@@ -9,6 +9,7 @@ public class NewsDto implements Serializable {
     private String url;
     private String urlToImage;
     private String description;
+    private String title;
 
     public NewsDto() {
     }
@@ -18,6 +19,7 @@ public class NewsDto implements Serializable {
                 .setUrl(url)
                 .setUrlToImage(urlToImage)
                 .setDescription(description)
+                .setTitle(title)
                     .build();
 
     }
@@ -44,5 +46,13 @@ public class NewsDto implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

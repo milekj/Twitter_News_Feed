@@ -4,7 +4,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import java.time.LocalDate;
 
 @Entity
 public class News {
@@ -21,18 +20,18 @@ public class News {
     @Column(length = 1024)
     private String description;
 
-    private LocalDate creationDate;
+    private String title;
+
 
     public News() {
     }
 
-    private News(String url, Interest interest, String urlToImage, String description) {
+    private News(String url, Interest interest, String urlToImage, String description, String title) {
         this.url = url;
         this.interest = interest;
         this.urlToImage = urlToImage;
         this.description = description;
-        this.creationDate = LocalDate.now();
-        System.out.println(creationDate);
+        this.title = title;
     }
 
     public String getUrl() {
@@ -71,11 +70,24 @@ public class News {
         return new Builder();
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public static class Builder {
         private String url;
         private Interest interest;
         private String urlToImage;
         private String description;
+        private String title;
+
+        public News build() {
+            return new News(url, interest, urlToImage, description, title);
+        }
 
         public Builder setUrl(String url) {
             this.url = url;
@@ -97,9 +109,11 @@ public class News {
             return this;
         }
 
-        public News build() {
-            return new News(url, interest, urlToImage, description);
+        public Builder setTitle(String title) {
+            this.title = title;
+            return this;
         }
+
     }
 
 }

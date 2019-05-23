@@ -1,12 +1,12 @@
 package agh.tai.twitter_news_feed.service;
 
-import agh.tai.twitter_news_feed.dao.NewsRepository;
 import agh.tai.twitter_news_feed.dto.news_api.EverythingDto;
 import agh.tai.twitter_news_feed.dto.news_api.NewsDto;
 import agh.tai.twitter_news_feed.entity.Interest;
 import agh.tai.twitter_news_feed.entity.News;
 import agh.tai.twitter_news_feed.entity.User;
 import agh.tai.twitter_news_feed.repository.InterestRepository;
+import agh.tai.twitter_news_feed.repository.NewsRepository;
 import agh.tai.twitter_news_feed.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 @Service
 public class NewsServiceImpl implements NewsService {
     private final static int MAX_NEWS_NUMBER = 100;
-    private final static int DOWNLOADED_NEWS_NUMBER = 10;
     private NewsRepository newsRepository;
     private InterestRepository interestRepository;
     private RestTemplate newApiRestTemplate;
@@ -35,9 +34,22 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     @Transactional
-    public void updateNews(User user) {
+    public void updateNews(User user, int newsPerInterestNumber) {
         List<Interest> interests = interestRepository.findAllByUser(user);
-        interests.forEach(i -> updateSingleNews(i, DOWNLOADED_NEWS_NUMBER));
+        interests.forEach(i -> updateSingleNews(i, newsPerInterestNumber));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Map<Interest, List<News>> getNewsPerInterest(User user, int newsToGetNumber) {
+        Map<Interest, List<News>> news = new HashMap<>();
+        List<Interest> interests = interestRepository.findAllByUser(user);
+        interests.forEach(interest -> {
+            List<News> singleInterestNews = interest.getNews();
+            List<News> limitedInterestNews = getSublist(singleInterestNews, newsToGetNumber);
+            news.put(interest, limitedInterestNews);
+        });
+        return news;
     }
 
     private void updateSingleNews(Interest interest, int newsNumber) {
@@ -47,6 +59,14 @@ public class NewsServiceImpl implements NewsService {
             if (!newsRepository.existsById(n.getUrl()))
                 newsRepository.save(n);
         });
+    }
+
+    private List<News> getSublist(List<News> news, int newsToGetNumber) {
+        int newsNumber = news.size();
+        int possibleNewsToGetNumber = Math.min(newsToGetNumber, news.size());
+        int startInclusive = newsNumber - possibleNewsToGetNumber;
+        int endExclusive = startInclusive + possibleNewsToGetNumber;
+        return news.subList(startInclusive, endExclusive);
     }
 
     private List<News> getNews(Interest interest, int newsNumber) {
@@ -72,8 +92,4 @@ public class NewsServiceImpl implements NewsService {
                         EverythingDto.class,
                         urlParams);
     }
-
-
-
-
 }
