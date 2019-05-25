@@ -11,17 +11,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/info", "/news")
+                .antMatchers("/info", "/news**", "/interest")
                 .authenticated()
-                    .and()
+            .and()
                 .rememberMe()
-                    .and()
+            .and()
+                .formLogin()
+                    .loginPage("/")
+            .and()
                 .logout()
-                .logoutUrl("/logout")
-                .invalidateHttpSession(true)
-                .clearAuthentication(true)
-                .logoutSuccessUrl("/")
-                    .and()
+                    .logoutUrl("/logout")
+                    .invalidateHttpSession(true)
+                    .clearAuthentication(true)
+                    .logoutSuccessUrl("/")
+            .and()
                 .apply(newSpringSocialConfigurer());
     }
 
