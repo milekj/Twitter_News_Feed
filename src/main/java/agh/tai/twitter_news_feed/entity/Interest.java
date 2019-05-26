@@ -1,7 +1,9 @@
 package agh.tai.twitter_news_feed.entity;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"name", "userid"}))
@@ -26,6 +28,8 @@ public class Interest {
 
     @OneToMany(mappedBy = "interest", fetch = FetchType.LAZY)
     private List<News> news;
+
+    private LocalDateTime updatedAt;
 
     public Interest() {
     }
@@ -77,5 +81,13 @@ public class Interest {
 
     public void setNews(List<News> news) {
         this.news = news;
+    }
+
+    public Optional<LocalDateTime> getUpdatedAt() {
+        return Optional.ofNullable(updatedAt);
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

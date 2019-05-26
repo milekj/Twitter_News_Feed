@@ -15,6 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.temporal.TemporalAmount;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -50,6 +54,27 @@ public class NewsServiceImpl implements NewsService {
             news.put(interest, singleInterestNews);
         });
         return news;
+    }
+
+    @Override
+    @Transactional
+    public void updateNewsIfNecessary(User user,
+                                      int newsNumber,
+                                      Period periodBetweenUpdates,
+                                      Duration durationBetweenUpdates) {
+        LocalDateTime now = LocalDateTime.now();
+        List<Interest> interests = interestRepository.findAllByUser(user);
+        interests.stream()
+                .filter(interest -> {
+                    LocalDateTime updatedAt = interest.getUpdatedAt().orElse(LocalDateTime.MIN);
+                    LocalDateTime nextUpdateAt = updatedAt.plus(periodBetweenUpdates).plus(durationBetweenUpdates);
+                    return now.isAfter(nextUpdateAt);
+                })
+                .forEach(interest -> {
+                    updateSingleNews(interest, newsNumber);
+                    interest.setUpdatedAt(now);
+                });
+
     }
 
     private void updateSingleNews(Interest interest, int newsNumber) {

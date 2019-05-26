@@ -1,6 +1,5 @@
 package agh.tai.twitter_news_feed.dto.news_api;
 
-import agh.tai.twitter_news_feed.entity.Interest;
 import agh.tai.twitter_news_feed.entity.News;
 
 import java.io.Serializable;
@@ -11,7 +10,7 @@ public class NewsDto implements Serializable {
     private String urlToImage;
     private String description;
     private String title;
-    private LocalDate localDate;
+    private LocalDate publishedAt;
 
     public NewsDto() {
     }
@@ -22,7 +21,7 @@ public class NewsDto implements Serializable {
                 .setUrlToImage(urlToImage)
                 .setDescription(description)
                 .setTitle(title)
-                .setPublishedAt(localDate)
+                .setPublishedAt(publishedAt)
                     .build();
 
     }
@@ -59,11 +58,11 @@ public class NewsDto implements Serializable {
         this.title = title;
     }
 
-    public LocalDate getLocalDate() {
-        return localDate;
+    public LocalDate getPublishedAt() {
+        return publishedAt;
     }
 
-    public void setLocalDate(LocalDate localDate) {
-        this.localDate = localDate;
+    public void setPublishedAt(LocalDate publishedAt) {
+        this.publishedAt = publishedAt;
     }
 }
