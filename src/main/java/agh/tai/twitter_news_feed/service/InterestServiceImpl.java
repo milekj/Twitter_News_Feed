@@ -1,10 +1,10 @@
 package agh.tai.twitter_news_feed.service;
 
 import agh.tai.twitter_news_feed.authentication.SocialUserDetailsImpl;
-import agh.tai.twitter_news_feed.repository.InterestRepository;
 import agh.tai.twitter_news_feed.dto.TweetDto;
 import agh.tai.twitter_news_feed.entity.Interest;
 import agh.tai.twitter_news_feed.entity.User;
+import agh.tai.twitter_news_feed.repository.InterestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.twitter.api.*;
 import org.springframework.stereotype.Service;
@@ -14,14 +14,14 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static agh.tai.twitter_news_feed.constants.Constants.*;
+import static agh.tai.twitter_news_feed.constants.Constants.FAVOURITE_INTERESTS_NUMBER;
+import static agh.tai.twitter_news_feed.constants.Constants.TWEETS_WITH_HASH_TAG;
 
 @Service
 public class InterestServiceImpl implements InterestService {
 
-    private InterestRepository interestRepository;
-
-    private TwitterApiService twitterApiService;
+    private final InterestRepository interestRepository;
+    private final TwitterApiService twitterApiService;
 
     @Autowired
     public InterestServiceImpl(InterestRepository interestRepository,

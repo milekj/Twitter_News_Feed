@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class InterestController {
 
-    private InterestService interestService;
+    private final InterestService interestService;
 
     @Autowired
     public InterestController(InterestService interestService) {
@@ -32,7 +32,7 @@ public class InterestController {
                                              @RequestParam String interestName,
                                              Model model) {
         model.addAttribute("interestingTweets", interestService.getLatestTweetsWithHashTag(userDetails, interestName));
-        return "interestTweet";
+        return "interest_tweet";
     }
 
     @GetMapping("/addInterest")

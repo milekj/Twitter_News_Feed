@@ -15,8 +15,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SocialUserDetailsServiceImpl implements SocialUserDetailsService {
-    private UserRepository userRepository;
-    private UsersConnectionRepository usersConnectionRepository;
+
+    private final UserRepository userRepository;
+    private final UsersConnectionRepository usersConnectionRepository;
 
     @Autowired
     public SocialUserDetailsServiceImpl(UserRepository userRepository,

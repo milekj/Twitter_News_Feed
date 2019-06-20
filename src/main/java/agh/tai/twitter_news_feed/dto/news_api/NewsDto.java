@@ -22,8 +22,7 @@ public class NewsDto implements Serializable {
                 .setDescription(description)
                 .setTitle(title)
                 .setPublishedAt(publishedAt)
-                    .build();
-
+                .build();
     }
 
     public String getUrl() {

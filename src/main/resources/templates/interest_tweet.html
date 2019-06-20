@@ -9,29 +9,61 @@
     <title>Title</title>
 </head>
 <body>
-    <div class="tweets-wrapper">
-        <div style="font-size: 40px; color: blue">
-            Found tweets with hashtag:
-        </div>
-        <div class="tweets-table">
-<!--            <table>-->
-<!--                <th:block th:each="tweet : ${interestingTweets}">-->
-                    <div th:each="tweet : ${interestingTweets}">
-                        <div>
-                            <img th:src="${tweet.profileImageUrl}" />
-                            <td th:text="${tweet.fromUser}" />
-                        </div>
-                        <div>
-                          <td th:text="${tweet.createdAt}" />
-                        </div>
-                        <div>
-                            <td th:text="${tweet.text}" />
-                        </div>
-                    </tr>
-<!--                </th:block>-->
-<!--            </table>-->
+<div class="menu">
+    <ul>
+        <li><a href="/info">Home</a></li>
+        <li><a href="/interest">Interest</a></li>
+        <li><a href="/news">News</a></li>
+    </ul>
+</div>
+<div class="tweets-wrapper">
+    <div style="font-size: 40px; color: blue">
+        Found tweets with hashtag:
+    </div>
+    <div class="tweets-table">
+        <div th:each="tweet : ${interestingTweets}">
+            <div>
+                <img th:src="${tweet.profileImageUrl}"/>
+                <td th:text="${tweet.fromUser}"/>
+            </div>
+            <div>
+                <td th:text="${tweet.createdAt}"/>
+            </div>
+            <div>
+                <td th:text="${tweet.text}"/>
+            </div>
+            </tr>
         </div>
     </div>
-
+</div>
 </body>
 </html>
+<style>
+    .menu {
+        margin-bottom: 20px;
+    }
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #333;
+    }
+
+    li {
+        float: left;
+    }
+
+    li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+
+    li a:hover:not(.active) {
+        background-color: lightskyblue;
+    }
+</style>

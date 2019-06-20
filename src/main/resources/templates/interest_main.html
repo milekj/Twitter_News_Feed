@@ -10,59 +10,68 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-    <div class="user-interests-wrapper">
-        <div class="main-text">
-            User interests:
-        </div>
-        <div class="user-interests-table">
-            <table style="width: 10%" >
+<div class="menu">
+    <ul>
+        <li><a href="/info">Home</a></li>
+        <li><a href="/interest">Interest</a></li>
+        <li><a href="/news">News</a></li>
+    </ul>
+</div>
+<div class="user-interests-wrapper">
+    <div class="main-text">
+        User interests:
+    </div>
+    <div class="user-interests-table">
+        <table style="width: 10%">
+            <tr>
+                <th>Name of interest</th>
+            </tr>
+            <th:block th:each="interestName : ${userInterests}">
                 <tr>
-                    <th>Name of interest</th>
+                    <td class="pointer selected-text" th:text="${interestName}" align="center" th:data="${interestName}"
+                        th:onclick="findTweetsByInterest(this.getAttribute('data'));"/>
+                    <td><i class="fa fa-minus pointer" th:data="${interestName}"
+                           th:onclick="removeInterest(this.getAttribute('data'));"></i></td>
                 </tr>
-                <th:block th:each="interestName : ${userInterests}">
-                    <tr>
-                        <td class="pointer selected-text" th:text="${interestName}" align="center" th:data="${interestName}"
-                            th:onclick="findTweetsByInterest(this.getAttribute('data'));"/>
-                        <td><i class="fa fa-minus pointer" th:data="${interestName}"
-                               th:onclick="removeInterest(this.getAttribute('data'));"></i></td>
-                    </tr>
-                </th:block>
-            </table>
-        </div>
+            </th:block>
+        </table>
     </div>
-    <div class="offered-interests-wrapper wrapper-padding">
-        <div class="main-text">
-            Offered interests:
-        </div>
-        <div class="offered-interests-table">
-            <table style="width: 20%" >
+</div>
+<div class="offered-interests-wrapper wrapper-padding">
+    <div class="main-text">
+        Offered interests:
+    </div>
+    <div class="offered-interests-table">
+        <table style="width: 20%">
+            <tr>
+                <th>Name of interest</th>
+                <th>Found times</th>
+            </tr>
+            <th:block th:each="interest : ${offeredInterestsMap}">
                 <tr>
-                    <th>Name of interest</th>
-                    <th>Found times</th>
+                    <td th:text="${interest.key}" align="center"/>
+                    <td th:text="${interest.value}" align="center"/>
+                    <td><i class="fa fa-plus pointer" th:data="${interest.key}"
+                           th:onclick="addInterest(this.getAttribute('data'));"></i></td>
+                    <td><i class="fa fa-minus pointer" th:data="${interest.key}"
+                           th:onclick="excludeInterest(this.getAttribute('data'));"></i></td>
                 </tr>
-                <th:block th:each="interest : ${offeredInterestsMap}">
-                    <tr>
-                        <td th:text="${interest.key}" align="center"/>
-                        <td th:text="${interest.value}" align="center"/>
-                        <td><i class="fa fa-plus pointer" th:data="${interest.key}" th:onclick="addInterest(this.getAttribute('data'));"></i></td>
-                        <td><i class="fa fa-minus pointer" th:data="${interest.key}" th:onclick="excludeInterest(this.getAttribute('data'));"></i></td>
-                    </tr>
-                </th:block>
-            </table>
-        </div>
+            </th:block>
+        </table>
     </div>
-    <div class="add-own-interest-wrapper wrapper-padding">
-        <div class="main-text">
-            Add your own interest:
-        </div>
-        <div class="input-container" id="input-text">
-            <form action="/addInterest">
-                <input class="input-field" required='' type='text' name="interestName">
-                <label placeholder='Any interest...'></label>
-                <button type="submit" value="Add">Add</button>
-            </form>
-        </div>
+</div>
+<div class="add-own-interest-wrapper wrapper-padding">
+    <div class="main-text">
+        Add your own interest:
     </div>
+    <div class="input-container" id="input-text">
+        <form action="/addInterest">
+            <input class="input-field" required='' type='text' name="interestName">
+            <label placeholder='Any interest...'></label>
+            <button type="submit" value="Add">Add</button>
+        </form>
+    </div>
+</div>
 </body>
 </html>
 
@@ -91,23 +100,29 @@
         color: blue;
         margin-bottom: 20px;
     }
+
     .wrapper-padding {
         padding-top: 50px;
     }
+
     .fa-minus {
         color: red;
     }
+
     .fa-plus {
         color: greenyellow;
     }
+
     .pointer {
         cursor: pointer;
     }
+
     .selected-text:hover {
         font-size: 20px;
         color: blue;
         font-weight: bold;
     }
+
     input[type="text"] {
         box-sizing: border-box;
         width: 20%;
@@ -120,21 +135,26 @@
         resize: none;
         outline: none;
     }
+
     input[type="text"][required]:focus {
         border-color: #00bafa;
     }
+
     input[type="text"][required]:focus + label[placeholder]:before {
         color: #00bafa;
     }
+
     input[type="text"][required]:focus + label[placeholder]:before,
     input[type="text"][required]:valid + label[placeholder]:before {
         transition-duration: 0.2s;
         -webkit-transform: translate(0, -1.5em) scale(0.9, 0.9);
         transform: translate(0, -1.5em) scale(0.9, 0.9);
     }
+
     input[type="text"][required]:invalid + label[placeholder][alt]:before {
         content: attr(alt);
     }
+
     input[type="text"][required] + label[placeholder] {
         display: block;
         pointer-events: none;
@@ -142,6 +162,7 @@
         margin-top: calc(-3em - 2px);
         margin-bottom: calc((3em - 1em) + 2px);
     }
+
     input[type="text"][required] + label[placeholder]:before {
         content: attr(placeholder);
         display: inline-block;
@@ -155,8 +176,36 @@
         background-repeat: no-repeat;
         background-position: center;
     }
+
+    .menu {
+        margin-bottom: 20px;
+    }
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #333;
+    }
+
+    li {
+        float: left;
+    }
+
+    li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+
+    li a:hover:not(.active) {
+        background-color: lightskyblue;
+    }
+
     html {
         height: 100%;
     }
-
 </style>

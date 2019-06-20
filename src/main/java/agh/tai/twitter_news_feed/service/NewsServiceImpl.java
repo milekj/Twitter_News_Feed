@@ -7,7 +7,6 @@ import agh.tai.twitter_news_feed.entity.News;
 import agh.tai.twitter_news_feed.entity.User;
 import agh.tai.twitter_news_feed.repository.InterestRepository;
 import agh.tai.twitter_news_feed.repository.NewsRepository;
-import agh.tai.twitter_news_feed.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,19 +17,21 @@ import org.springframework.web.client.RestTemplate;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Period;
-import java.time.temporal.TemporalAmount;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class NewsServiceImpl implements NewsService {
+
     private final static int MAX_NEWS_NUMBER = 100;
-    private NewsRepository newsRepository;
-    private InterestRepository interestRepository;
-    private RestTemplate newApiRestTemplate;
+    private final NewsRepository newsRepository;
+    private final InterestRepository interestRepository;
+    private final RestTemplate newApiRestTemplate;
 
     @Autowired
-    public NewsServiceImpl(NewsRepository newsRepository, InterestRepository interestRepository, RestTemplate newApiRestTemplate) {
+    public NewsServiceImpl(NewsRepository newsRepository,
+                           InterestRepository interestRepository,
+                           RestTemplate newApiRestTemplate) {
         this.newsRepository = newsRepository;
         this.interestRepository = interestRepository;
         this.newApiRestTemplate = newApiRestTemplate;
@@ -47,8 +48,7 @@ public class NewsServiceImpl implements NewsService {
     @Transactional(readOnly = true)
     public Map<Interest, List<News>> getNewsPerInterest(User user, int newsToGetNumber) {
         Map<Interest, List<News>> news = new HashMap<>();
-        List<Interest> interests = interestRepository.findAllByUser(user);
-        interests.forEach(interest -> {
+        interestRepository.findAllByUser(user).forEach(interest -> {
             Pageable pageable = PageRequest.of(0, newsToGetNumber);
             List<News> singleInterestNews = newsRepository.findAllByInterestOrderByPublishedAtDesc(interest, pageable);
             news.put(interest, singleInterestNews);
@@ -63,13 +63,8 @@ public class NewsServiceImpl implements NewsService {
                                       Period periodBetweenUpdates,
                                       Duration durationBetweenUpdates) {
         LocalDateTime now = LocalDateTime.now();
-        List<Interest> interests = interestRepository.findAllByUser(user);
-        interests.stream()
-                .filter(interest -> {
-                    LocalDateTime updatedAt = interest.getUpdatedAt().orElse(LocalDateTime.MIN);
-                    LocalDateTime nextUpdateAt = updatedAt.plus(periodBetweenUpdates).plus(durationBetweenUpdates);
-                    return now.isAfter(nextUpdateAt);
-                })
+        interestRepository.findAllByUser(user).stream()
+                .filter(interest -> isNextUpdateAfterNow(interest, periodBetweenUpdates, durationBetweenUpdates, now))
                 .forEach(interest -> {
                     updateSingleNews(interest, newsNumber);
                     interest.setUpdatedAt(now);
@@ -77,18 +72,25 @@ public class NewsServiceImpl implements NewsService {
 
     }
 
+    private boolean isNextUpdateAfterNow(Interest interest, Period periodBetweenUpdates, Duration durationBetweenUpdates,
+                                         LocalDateTime now) {
+        LocalDateTime updatedAt = interest.getUpdatedAt().orElse(LocalDateTime.MIN);
+        LocalDateTime nextUpdateAt = updatedAt.plus(periodBetweenUpdates).plus(durationBetweenUpdates);
+        return now.isAfter(nextUpdateAt);
+    }
+
     private void updateSingleNews(Interest interest, int newsNumber) {
-        List<News> news = getNews(interest, newsNumber);
-        news.forEach(n -> {
-            if (!newsRepository.existsById(n.getUrl()))
-                newsRepository.save(n);
-        });
+        //maybe we should get all ids and then compare instead of making many enquiries to database
+        getNews(interest, newsNumber).stream()
+                .filter(news -> !newsRepository.existsById(news.getUrl()))
+                .forEach(newsRepository::save);
     }
 
     private List<News> getNews(Interest interest, int newsNumber) {
         EverythingDto everythingDto = downloadFromApi(interest.getName(), newsNumber);
-        if (everythingDto == null)
+        if (Objects.isNull(everythingDto)) {
             return Collections.emptyList();
+        }
         return everythingDto.getArticles()
                 .stream()
                 .map(NewsDto::toNews)
@@ -107,4 +109,5 @@ public class NewsServiceImpl implements NewsService {
                         EverythingDto.class,
                         urlParams);
     }
+
 }

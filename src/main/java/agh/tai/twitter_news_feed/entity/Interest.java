@@ -26,7 +26,7 @@ public class Interest {
     @Column(nullable = false)
     private boolean excluded;
 
-    @OneToMany(mappedBy = "interest", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "interest", cascade = CascadeType.REMOVE)
     private List<News> news;
 
     private LocalDateTime updatedAt;
@@ -90,4 +90,5 @@ public class Interest {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
 }

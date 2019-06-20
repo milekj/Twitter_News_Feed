@@ -11,7 +11,9 @@ import java.util.Map;
 
 public interface NewsService {
     void updateNews(User user, int newsPerInterestNumber);
+
     Map<Interest, List<News>> getNewsPerInterest(User user, int newsNumber);
+
     void updateNewsIfNecessary(User user,
                                int newsNumber,
                                Period periodBetweenUpdates,

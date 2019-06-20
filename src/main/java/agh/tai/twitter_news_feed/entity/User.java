@@ -8,8 +8,8 @@ import java.util.List;
 @Entity
 @Table(name = "userconnection",
         uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"userId", "providerId", "rank"})}
-        )
+                @UniqueConstraint(columnNames = {"userId", "providerId", "rank"})}
+)
 @IdClass(UserId.class)
 public class User {
     @Id
@@ -142,4 +142,5 @@ public class User {
     public void setInterests(List<Interest> interests) {
         this.interests = interests;
     }
+
 }

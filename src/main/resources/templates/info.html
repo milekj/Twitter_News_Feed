@@ -7,15 +7,52 @@
     <title>Title</title>
 </head>
 <body>
-    Hello, <th th:text="${user.username}"/> <br>
-    <img th:src="${connection.imageUrl}" />
-    <div class="interest" style="padding-top: 50px">
-        <form action="/interest" method="get">
-            <button type="submit">Interests!</button>
-        </form><br>
-        <form action="#" th:action="@{/logout}" method="post">
-            <button type="submit">Logout!</button>
-        </form>
-    </div>
+<div class="menu">
+    <ul>
+        <li><a href="/info">Home</a></li>
+        <li><a href="/interest">Interest</a></li>
+        <li><a href="/news">News</a></li>
+    </ul>
+</div>
+<div class="user-information">
+    Hello,
+    <th th:text="${user.username}"/>
+    <br>
+    <img th:src="${connection.imageUrl}"/>
+</div>
+<div class="logout">
+    <form action="#" th:action="@{/logout}" method="post">
+        <button type="submit">Logout!</button>
+    </form>
+</div>
 </body>
 </html>
+<style>
+    .menu {
+        margin-bottom: 20px;
+    }
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #333;
+    }
+
+    li {
+        float: left;
+    }
+
+    li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+
+    li a:hover:not(.active) {
+        background-color: lightskyblue;
+    }
+</style>

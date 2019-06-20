@@ -1,12 +1,10 @@
 package agh.tai.twitter_news_feed.config;
 
 import agh.tai.twitter_news_feed.authentication.ApiCredentials;
-import org.hibernate.mapping.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
-import org.springframework.security.web.header.Header;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
@@ -14,9 +12,10 @@ import java.util.Collections;
 
 @Configuration
 public class NewsApiConfig {
+
     private static final String NEWS_API_BASE_URL = "https://newsapi.org/v2";
     private static final String NEWS_API_KEY_HEADER_NAME = "X-Api-Key";
-    private ApiCredentials apiCredentials;
+    private final ApiCredentials apiCredentials;
 
     @Autowired
     public NewsApiConfig(ApiCredentials apiCredentials) {
@@ -35,4 +34,5 @@ public class NewsApiConfig {
         restTemplate.setInterceptors(Collections.singletonList(apiKeyHeaderInterceptor));
         return restTemplate;
     }
+
 }

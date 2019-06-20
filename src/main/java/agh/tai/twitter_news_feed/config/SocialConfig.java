@@ -24,7 +24,7 @@ import javax.sql.DataSource;
 public class SocialConfig implements SocialConfigurer {
     private DataSource dataSource;
     private ConnectionFactoryLocator connectionFactoryLocator;
-    private ApiCredentials apiCredentials;
+    private final ApiCredentials apiCredentials;
 
     @Autowired
     public SocialConfig(ApiCredentials apiCredentials) {

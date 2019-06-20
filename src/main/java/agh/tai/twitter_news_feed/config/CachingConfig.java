@@ -12,7 +12,8 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
-import static agh.tai.twitter_news_feed.constants.Constants.*;
+import static agh.tai.twitter_news_feed.constants.Constants.CACHE_NAME;
+import static agh.tai.twitter_news_feed.constants.Constants.TIME_LINE_OPERATIONS_TIME_TO_LIVE;
 
 @Configuration
 @EnableCaching
@@ -28,9 +29,9 @@ public class CachingConfig {
 
     private CaffeineCache buildCache(String name, Ticker ticker, int secondsToExpire) {
         return new CaffeineCache(name, Caffeine.newBuilder()
-        .expireAfterWrite(secondsToExpire, TimeUnit.SECONDS)
-        .ticker(ticker)
-        .build());
+                .expireAfterWrite(secondsToExpire, TimeUnit.SECONDS)
+                .ticker(ticker)
+                .build());
     }
 
     @Bean

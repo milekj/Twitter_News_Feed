@@ -1,4 +1,4 @@
-  package agh.tai.twitter_news_feed.controller;
+package agh.tai.twitter_news_feed.controller;
 
 import agh.tai.twitter_news_feed.authentication.SocialUserDetailsImpl;
 import agh.tai.twitter_news_feed.service.NewsService;
@@ -18,19 +18,21 @@ import java.util.Objects;
 @Controller
 public class MainController {
 
-    private ProviderSignInUtils providerSignInUtils;
-    private NewsService NewsService;
+    private final ProviderSignInUtils providerSignInUtils;
+    private final NewsService newsService;
 
     @Autowired
-    public MainController(ProviderSignInUtils providerSignInUtils, NewsService NewsService) {
+    public MainController(ProviderSignInUtils providerSignInUtils,
+                          NewsService newsService) {
         this.providerSignInUtils = providerSignInUtils;
-        this.NewsService = NewsService;
+        this.newsService = newsService;
     }
 
     @GetMapping("/")
-    public String index(@AuthenticationPrincipal SocialUserDetailsImpl userDetails){
-        if (userDetails != null)
+    public String index(@AuthenticationPrincipal SocialUserDetailsImpl userDetails) {
+        if (Objects.nonNull(userDetails)) {
             return "redirect:/info";
+        }
         return "index";
     }
 
@@ -55,7 +57,7 @@ public class MainController {
 
     @GetMapping("/postLogin")
     public String postLogin(@AuthenticationPrincipal SocialUserDetailsImpl userDetails) {
-        if(!userDetails.getConnection().test()) {
+        if (!userDetails.getConnection().test()) {
             SecurityContextHolder.clearContext();
             return "redirect:/auth/twitter";
         }

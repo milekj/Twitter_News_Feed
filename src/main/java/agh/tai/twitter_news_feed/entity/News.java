@@ -8,6 +8,7 @@ import java.time.LocalDate;
 
 @Entity
 public class News {
+
     @Id
     @Column(length = 1024)
     private String url;
@@ -29,7 +30,7 @@ public class News {
     public News() {
     }
 
-    private News(String url, Interest interest, String urlToImage, String description, String title, LocalDate publishedAt) {
+    public News(String url, Interest interest, String urlToImage, String description, String title, LocalDate publishedAt) {
         this.url = url;
         this.interest = interest;
         this.urlToImage = urlToImage;
@@ -70,8 +71,8 @@ public class News {
         this.description = description;
     }
 
-    public static Builder builder() {
-        return new Builder();
+    public static NewsBuilder builder() {
+        return new NewsBuilder();
     }
 
     public String getTitle() {
@@ -82,48 +83,12 @@ public class News {
         this.title = title;
     }
 
-    public static class Builder {
-        private String url;
-        private Interest interest;
-        private String urlToImage;
-        private String description;
-        private String title;
-        private LocalDate publishedAt;
+    public LocalDate getPublishedAt() {
+        return publishedAt;
+    }
 
-        public News build() {
-            return new News(url, interest, urlToImage, description, title, publishedAt);
-        }
-
-        public Builder setUrl(String url) {
-            this.url = url;
-            return this;
-        }
-
-        public Builder setInterest(Interest interest) {
-            this.interest = interest;
-            return this;
-        }
-
-        public Builder setUrlToImage(String urlToImage) {
-            this.urlToImage = urlToImage;
-            return this;
-        }
-
-        public Builder setDescription(String description) {
-            this.description = description;
-            return this;
-        }
-
-        public Builder setTitle(String title) {
-            this.title = title;
-            return this;
-        }
-
-
-        public Builder setPublishedAt(LocalDate publishedAt) {
-            this.publishedAt = publishedAt;
-            return this;
-        }
+    public void setPublishedAt(LocalDate publishedAt) {
+        this.publishedAt = publishedAt;
     }
 
 }
