@@ -2,8 +2,10 @@ package agh.tai.twitter_news_feed.service;
 
 import agh.tai.twitter_news_feed.authentication.SocialUserDetailsImpl;
 import agh.tai.twitter_news_feed.dto.TweetDto;
+import agh.tai.twitter_news_feed.entity.DurationWithUnit;
 import agh.tai.twitter_news_feed.entity.Interest;
 import agh.tai.twitter_news_feed.entity.User;
+import agh.tai.twitter_news_feed.entity.identity.UserId;
 
 import java.util.List;
 import java.util.Map;
@@ -27,4 +29,5 @@ public interface InterestService {
     //todo
     List<Interest> findAllUserExcludedInterests(User user);
 
+    void setUpdateFrequency(String username, int interestId, DurationWithUnit updateFrequency);
 }

@@ -2,8 +2,10 @@ package agh.tai.twitter_news_feed.service;
 
 import agh.tai.twitter_news_feed.authentication.SocialUserDetailsImpl;
 import agh.tai.twitter_news_feed.dto.TweetDto;
+import agh.tai.twitter_news_feed.entity.DurationWithUnit;
 import agh.tai.twitter_news_feed.entity.Interest;
 import agh.tai.twitter_news_feed.entity.User;
+import agh.tai.twitter_news_feed.entity.identity.UserId;
 import agh.tai.twitter_news_feed.repository.InterestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.twitter.api.*;
@@ -110,4 +112,11 @@ public class InterestServiceImpl implements InterestService {
         return interestRepository.findAllByUser(user);
     }
 
+    @Override
+    @Transactional
+    public void setUpdateFrequency(String username, int interestId, DurationWithUnit updateFrequency) {
+        Interest interest = interestRepository.findByIntIdAndUserUserId(interestId, username)
+                .orElseThrow(IllegalArgumentException::new);
+        interest.setUpdateFrequency(updateFrequency);
+    }
 }

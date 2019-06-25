@@ -7,6 +7,8 @@
     <title>Title</title>
 </head>
 
+<link th:href="@{/style.css}" rel="stylesheet"/>
+
 <!--snippet for loading twitter stuff from developer.twitter-->
 <script>window.twttr = (function (d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {};
@@ -24,17 +26,26 @@
 </script>
 
 <body>
-<div class="menu">
-    <ul>
-        <li><a href="/info">Home</a></li>
-        <li><a href="/interest">Interest</a></li>
-        <li><a href="/news">News</a></li>
-    </ul>
-</div>
+<div th:insert="menu"></div>
+<form action="#" th:action="@{/news}"  method="get">
+    <input type="submit" value="news to show number: ">
+    <input type="number" name="newsNumber" th:value="${newsNumber}">
+</form>
 <div class="interest-news-wrapper">
     <table th:each="interestNews : ${interestsNewsMap}">
-        <tr>
-            <h1 th:text="${interestNews.key.name}"/>
+        <tr th:with="interest=${interestNews.key}">
+            <h1 th:text="${interest.name}"/>
+            <form action="#" th:action="@{/interest/updateFrequency}"  method="get">
+                <input type="submit" value="update every:">
+                <input type="number" name="duration" th:value="${interest.updateFrequency.getDuration()}">
+                <select name="unit">
+                    <option th:each="name : ${timeUnitNames}"
+                            th:value="${name}"
+                            th:text="${name}"
+                            th:selected="${name.equals(interest.updateFrequency.unit.name())}"/>
+                </select>
+                <input type="hidden" name="interestId" th:value="${interest.intId}">
+            </form>
         </tr>
         <tr>
             <table th:each="news : ${interestNews.value}">
@@ -58,41 +69,3 @@
 </div>
 </body>
 </html>
-<style>
-    .menu {
-        margin-bottom: 20px;
-    }
-
-    ul {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        background-color: #333;
-    }
-
-    li {
-        float: left;
-    }
-
-    li a {
-        display: block;
-        color: white;
-        text-align: center;
-        padding: 14px 16px;
-        text-decoration: none;
-    }
-
-    li a:hover:not(.active) {
-        background-color: lightskyblue;
-    }
-
-    .news-image {
-        object-fit: cover;
-        object-position: 50% 50%;
-    }
-
-    .news-image:hover {
-        object-fit: contain;
-    }
-</style>

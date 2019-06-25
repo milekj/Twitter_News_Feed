@@ -50,7 +50,7 @@ public class NewsServiceImpl implements NewsService {
         Map<Interest, List<News>> news = new HashMap<>();
         interestRepository.findAllByUser(user).forEach(interest -> {
             Pageable pageable = PageRequest.of(0, newsToGetNumber);
-            List<News> singleInterestNews = newsRepository.findAllByInterestOrderByPublishedAtDesc(interest, pageable);
+            List<News> singleInterestNews = newsRepository.findAllByInterestAndInterestExcludedFalseOrderByPublishedAtDesc(interest, pageable);
             news.put(interest, singleInterestNews);
         });
         return news;

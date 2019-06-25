@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<div class="menu">
+    <ul>
+        <li><a href="/info">Home</a></li>
+        <li><a href="/interest">Interest</a></li>
+        <li><a href="/news">News</a></li>
+        <li>
+            <form id="logoutForm" action="#" th:action="@{/logout}" method="post">
+                <a href="javascript:" onclick="document.getElementById('logoutForm').submit();">Logout</a>
+            </form>
+        </li>
+    </ul>
+</div>
+</html>

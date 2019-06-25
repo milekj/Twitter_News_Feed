@@ -17,26 +17,29 @@ public class Interest {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
+    private boolean excluded;
+
+    private LocalDateTime updatedAt;
+
+    private DurationWithUnit updateFrequency;
+
     @ManyToOne
     @JoinColumns({@JoinColumn(name = "userid", referencedColumnName = "userid"),
             @JoinColumn(name = "providerid", referencedColumnName = "providerid"),
             @JoinColumn(name = "provideruserid", referencedColumnName = "provideruserid")})
     private User user;
 
-    @Column(nullable = false)
-    private boolean excluded;
-
     @OneToMany(mappedBy = "interest", cascade = CascadeType.REMOVE)
     private List<News> news;
-
-    private LocalDateTime updatedAt;
 
     public Interest() {
     }
 
-    public Interest(String name, User user) {
+    public Interest(String name, User user, DurationWithUnit updateFrequency) {
         this.name = name;
         this.user = user;
+        this.updateFrequency = updateFrequency;
     }
 
     public int getIntId() {
@@ -89,6 +92,14 @@ public class Interest {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public DurationWithUnit getUpdateFrequency() {
+        return updateFrequency;
+    }
+
+    public void setUpdateFrequency(DurationWithUnit updateFrequency) {
+        this.updateFrequency = updateFrequency;
     }
 
 }
