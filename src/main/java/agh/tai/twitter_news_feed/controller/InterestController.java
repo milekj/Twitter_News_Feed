@@ -13,12 +13,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.temporal.ChronoUnit;
 import java.util.concurrent.TimeUnit;
 
 @Controller
 public class InterestController {
     private final static DurationWithUnit DEFAULT_NEWS_UPDATE_FREQUENCY
-            = new DurationWithUnit(1, TimeUnit.HOURS);
+            = new DurationWithUnit(1, ChronoUnit.HOURS);
     private final InterestService interestService;
 
     @Autowired
@@ -47,7 +48,7 @@ public class InterestController {
                               Model model) {
         interestService.addInterest(new Interest(interestName, userDetails.getUser(), DEFAULT_NEWS_UPDATE_FREQUENCY));
         addInterestMainPropertiesToModel(userDetails, model);
-        return "/interest_main";
+        return "interest_main";
     }
 
     @GetMapping("/removeInterest")
@@ -56,7 +57,7 @@ public class InterestController {
                                  Model model) {
         interestService.removeInterest(new Interest(interestName, userDetails.getUser(), null));
         addInterestMainPropertiesToModel(userDetails, model);
-        return "/interest_main";
+        return "interest_main";
     }
 
     private void addInterestMainPropertiesToModel(SocialUserDetailsImpl userDetails, Model model) {
@@ -70,14 +71,14 @@ public class InterestController {
                                   Model model) {
         interestService.excludeInterest(new Interest(interestName, userDetails.getUser(), null));
         addInterestMainPropertiesToModel(userDetails, model);
-        return "/interest_main";
+        return "interest_main";
     }
 
     @GetMapping("/interest/updateFrequency")
     public String setUpdateFrequency(@AuthenticationPrincipal SocialUserDetailsImpl userDetails,
                                      @RequestParam int interestId,
                                      @RequestParam long duration,
-                                     @RequestParam TimeUnit unit) {
+                                     @RequestParam ChronoUnit unit) {
         DurationWithUnit durationWithUnit = new DurationWithUnit(duration, unit);
         interestService.setUpdateFrequency(userDetails.getUsername(), interestId, durationWithUnit);
         return "redirect:/news";

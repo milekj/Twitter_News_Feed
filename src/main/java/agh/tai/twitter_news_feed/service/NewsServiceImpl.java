@@ -2,6 +2,7 @@ package agh.tai.twitter_news_feed.service;
 
 import agh.tai.twitter_news_feed.dto.news_api.EverythingDto;
 import agh.tai.twitter_news_feed.dto.news_api.NewsDto;
+import agh.tai.twitter_news_feed.entity.DurationWithUnit;
 import agh.tai.twitter_news_feed.entity.Interest;
 import agh.tai.twitter_news_feed.entity.News;
 import agh.tai.twitter_news_feed.entity.User;
@@ -17,7 +18,10 @@ import org.springframework.web.client.RestTemplate;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -59,12 +63,10 @@ public class NewsServiceImpl implements NewsService {
     @Override
     @Transactional
     public void updateNewsIfNecessary(User user,
-                                      int newsNumber,
-                                      Period periodBetweenUpdates,
-                                      Duration durationBetweenUpdates) {
+                                      int newsNumber) {
         LocalDateTime now = LocalDateTime.now();
         interestRepository.findAllByUser(user).stream()
-                .filter(interest -> isNextUpdateAfterNow(interest, periodBetweenUpdates, durationBetweenUpdates, now))
+                .filter(interest -> isNextUpdateAfter(interest, now))
                 .forEach(interest -> {
                     updateSingleNews(interest, newsNumber);
                     interest.setUpdatedAt(now);
@@ -72,10 +74,12 @@ public class NewsServiceImpl implements NewsService {
 
     }
 
-    private boolean isNextUpdateAfterNow(Interest interest, Period periodBetweenUpdates, Duration durationBetweenUpdates,
-                                         LocalDateTime now) {
+    private boolean isNextUpdateAfter(Interest interest, LocalDateTime now) {
         LocalDateTime updatedAt = interest.getUpdatedAt().orElse(LocalDateTime.MIN);
-        LocalDateTime nextUpdateAt = updatedAt.plus(periodBetweenUpdates).plus(durationBetweenUpdates);
+        DurationWithUnit updatesFrequency = interest.getUpdateFrequency();
+        long duration = updatesFrequency.getDuration();
+        ChronoUnit unit = updatesFrequency.getUnit();
+        LocalDateTime nextUpdateAt = updatedAt.plus(duration, unit);
         return now.isAfter(nextUpdateAt);
     }
 

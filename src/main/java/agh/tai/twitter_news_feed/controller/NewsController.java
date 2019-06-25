@@ -22,9 +22,6 @@ import java.util.stream.Collectors;
 @RequestMapping("/news")
 public class NewsController {
     private final static int NEWS_TO_DOWNLOAD_NUMBER = 10;
-    private final static int NEWS_PER_INTEREST_TO_SHOW_NUMBER = 3;
-    private final static Duration DURATION_BETWEEN_UPDATES = Duration.ofMinutes(1);
-    private final static Period PERIOD_BETWEEN_UPDATES = Period.ZERO;
     private final NewsService newsService;
 
     @Autowired
@@ -37,7 +34,7 @@ public class NewsController {
                            @RequestParam(defaultValue = "3") int newsNumber,
                            Model model) {
         User user = userDetails.getUser();
-        newsService.updateNewsIfNecessary(user, NEWS_TO_DOWNLOAD_NUMBER, PERIOD_BETWEEN_UPDATES, DURATION_BETWEEN_UPDATES);
+        newsService.updateNewsIfNecessary(user, NEWS_TO_DOWNLOAD_NUMBER);
         model.addAttribute("interestsNewsMap", newsService.getNewsPerInterest(user, newsNumber));
         model.addAttribute("newsNumber", newsNumber);
         List<String> timeUnitNames = Arrays.stream(TimeUnit.values())

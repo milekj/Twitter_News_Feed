@@ -1,17 +1,17 @@
 package agh.tai.twitter_news_feed.entity;
 
 import javax.persistence.Embeddable;
-import java.util.concurrent.TimeUnit;
+import java.time.temporal.ChronoUnit;
 
 @Embeddable
 public class DurationWithUnit {
     private long duration;
-    private TimeUnit unit;
+    private ChronoUnit unit;
 
     public DurationWithUnit() {
     }
 
-    public DurationWithUnit(long duration, TimeUnit unit) {
+    public DurationWithUnit(long duration, ChronoUnit unit) {
         this.duration = duration;
         this.unit = unit;
     }
@@ -24,11 +24,11 @@ public class DurationWithUnit {
         this.duration = duration;
     }
 
-    public TimeUnit getUnit() {
+    public ChronoUnit getUnit() {
         return unit;
     }
 
-    public void setUnit(TimeUnit unit) {
+    public void setUnit(ChronoUnit unit) {
         this.unit = unit;
     }
 }
