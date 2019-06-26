@@ -27,15 +27,15 @@
 
 <body>
 <div th:insert="menu"></div>
-<form action="#" th:action="@{/news}"  method="get">
-    <input type="submit" value="news to show number: ">
-    <input type="number" name="newsNumber" th:value="${newsNumber}">
+<form action="#" th:action="@{/news}" method="get">
+    <input class="news-number-click" type="submit" value="news to show number: ">
+    <input class="news-number" type="number" name="newsNumber" th:value="${newsNumber}">
 </form>
 <div class="interest-news-wrapper">
     <table th:each="interestNews : ${interestsNewsMap}">
         <tr th:with="interest=${interestNews.key}">
             <h1 th:text="${interest.name}"/>
-            <form action="#" th:action="@{/interest/updateFrequency}"  method="get">
+            <form action="#" th:action="@{/interest/updateFrequency}" method="get">
                 <input type="submit" value="update every:">
                 <input type="number" name="duration" th:value="${interest.updateFrequency.getDuration()}">
                 <select name="unit">
