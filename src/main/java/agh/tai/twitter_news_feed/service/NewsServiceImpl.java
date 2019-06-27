@@ -15,13 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,15 +40,15 @@ public class NewsServiceImpl implements NewsService {
     @Override
     @Transactional
     public void updateNews(User user, int newsPerInterestNumber) {
-        List<Interest> interests = interestRepository.findAllByUser(user);
+        List<Interest> interests = interestRepository.findAllByUserOrderByName(user);
         interests.forEach(i -> updateSingleNews(i, newsPerInterestNumber));
     }
 
     @Override
     @Transactional(readOnly = true)
     public Map<Interest, List<News>> getNewsPerInterest(User user, int newsToGetNumber) {
-        Map<Interest, List<News>> news = new HashMap<>();
-        interestRepository.findAllByUser(user).forEach(interest -> {
+        Map<Interest, List<News>> news = new LinkedHashMap<>();
+        interestRepository.findAllByUserOrderByName(user).forEach(interest -> {
             Pageable pageable = PageRequest.of(0, newsToGetNumber);
             List<News> singleInterestNews = newsRepository.findAllByInterestAndInterestExcludedFalseOrderByPublishedAtDesc(interest, pageable);
             news.put(interest, singleInterestNews);
@@ -65,7 +61,7 @@ public class NewsServiceImpl implements NewsService {
     public void updateNewsIfNecessary(User user,
                                       int newsNumber) {
         LocalDateTime now = LocalDateTime.now();
-        interestRepository.findAllByUser(user).stream()
+        interestRepository.findAllByUserOrderByName(user).stream()
                 .filter(interest -> isNextUpdateAfter(interest, now))
                 .forEach(interest -> {
                     updateSingleNews(interest, newsNumber);

@@ -5,7 +5,6 @@ import agh.tai.twitter_news_feed.dto.TweetDto;
 import agh.tai.twitter_news_feed.entity.DurationWithUnit;
 import agh.tai.twitter_news_feed.entity.Interest;
 import agh.tai.twitter_news_feed.entity.User;
-import agh.tai.twitter_news_feed.entity.identity.UserId;
 import agh.tai.twitter_news_feed.repository.InterestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.twitter.api.*;
@@ -35,11 +34,11 @@ public class InterestServiceImpl implements InterestService {
     @Override
     public Map<String, Long> getFavouriteInterests(SocialUserDetailsImpl userDetails) {
         return twitterApiService.getTimeLineOperations(userDetails).stream()
-                .filter(this::shouldTweetBeFiltered)
                 .map(Tweet::getEntities)
                 .map(Entities::getHashTags)
                 .flatMap(Collection::stream)
                 .map(HashTagEntity::getText)
+                .map(s -> new HashtagParser(s).parse())
                 .filter(interestName -> canBeANewInterest(interestName, userDetails.getUser()))
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
                 .entrySet()
@@ -49,19 +48,15 @@ public class InterestServiceImpl implements InterestService {
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
     }
 
-    private boolean shouldTweetBeFiltered(Tweet tweet) {
-        return tweet.isFavorited() || tweet.isRetweeted();
-    }
-
     private boolean canBeANewInterest(String interestName, User user) {
-        return interestRepository.findAllByUser(user).stream()
+        return interestRepository.findAllByUserOrderByName(user).stream()
                 .map(Interest::getName)
                 .noneMatch(name -> name.equalsIgnoreCase(interestName));
     }
 
     @Override
     public List<String> getAllUserInterestsName(User user) {
-        return interestRepository.findAllByUser(user).stream()
+        return interestRepository.findAllByUserOrderByName(user).stream()
                 .filter(Interest::isIncluded)
                 .map(Interest::getName)
                 .collect(Collectors.toList());
@@ -101,7 +96,7 @@ public class InterestServiceImpl implements InterestService {
 
     @Override
     public List<Interest> findAllUserExcludedInterests(User user) {
-        return interestRepository.findAllByUser(user).stream()
+        return interestRepository.findAllByUserOrderByName(user).stream()
                 .filter(Interest::isExcluded)
                 .collect(Collectors.toList());
     }
@@ -109,7 +104,7 @@ public class InterestServiceImpl implements InterestService {
     @Override
     @Transactional(readOnly = true)
     public List<Interest> findAllUserInterests(User user) {
-        return interestRepository.findAllByUser(user);
+        return interestRepository.findAllByUserOrderByName(user);
     }
 
     @Override
