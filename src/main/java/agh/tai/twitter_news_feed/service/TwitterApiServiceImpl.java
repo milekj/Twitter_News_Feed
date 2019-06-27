@@ -27,6 +27,7 @@ public class TwitterApiServiceImpl implements TwitterApiService {
         List<Tweet> favorites = timelineOperations.getFavorites(FILTERED_TWEETS_NUMBER);
         List<Tweet> mentions = timelineOperations.getMentions(FILTERED_TWEETS_NUMBER);
         List<Tweet> userTimeline = timelineOperations.getUserTimeline(FILTERED_TWEETS_NUMBER);
+        homeTimeline.removeAll(userTimeline);
 
         return Stream.of(homeTimeline, favorites, mentions, userTimeline)
                 .flatMap(Collection::stream)

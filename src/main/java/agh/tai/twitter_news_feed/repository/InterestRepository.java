@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface InterestRepository extends JpaRepository<Interest, Integer> {
 
-    List<Interest> findAllByUser(User user);
+    List<Interest> findAllByUserOrderByName(User user);
 
     Interest findByNameAndUser(String name, User user);
 

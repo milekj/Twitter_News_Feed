@@ -65,4 +65,9 @@ public class MainController {
         return "redirect:/info";
     }
 
+    @GetMapping("/error")
+    public String handleErrors() {
+        return "error";
+    }
+
 }
