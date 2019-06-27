@@ -41,7 +41,7 @@ public class InterestRepositoryTest {
 
     @Test
     public void findAllByUser() {
-        List<Interest> allByUser = interestRepository.findAllByUser(user);
+        List<Interest> allByUser = interestRepository.findAllByUserOrderByName(user);
         Assertions.assertThat(allByUser).isNotEmpty();
     }
 
